@@ -2,7 +2,14 @@
 .cproject
 .settings/
 
+Debug/
+
 *.tmp
 *.~
 *.swp
 
+*.o
+*.a
+*.elf
+
+test
