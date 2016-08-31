@@ -18,12 +18,12 @@
  */
 void set_led(uint8_t led, uint8_t value)
 {
-    printf("Setting LED\n");
+    printf("Setting LED %d to value %d...\n", led, value);
 }
 
 void set_led_channel(uint8_t led, uint8_t value, uint8_t bitmask)
 {
-    printf("Setting LED channel\n");
+    printf("Setting LED %d to value %d using bitmask %d...\n", led, value, bitmask);
 }
 
 void error_handler(char* message)
@@ -38,7 +38,7 @@ int main()
 
     // Notation char* json = "{}"; is invalid here!
     // String literals are not writeable
-    char json[] = "  {}  ";
+    char json[] = "  { 0: {test1}, 1 : {test2}  }  ";
 
     parser_t parser;
 
