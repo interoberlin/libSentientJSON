@@ -6,7 +6,10 @@
 #ifndef JSON_H
 #define JSON_H
 
+#include <stdio.h>
+#include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
 
 /**
  * These types declares, how the callback function should look like,

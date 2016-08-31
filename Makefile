@@ -1,6 +1,6 @@
 
-CC = gcc
-CFLAGS = -std=gnu99 -Wall -Wextra -g
+CC = colorgcc
+CFLAGS = -std=gnu99 -Wall -Wextra -Wwrite-strings -g
 LD = gcc
 LDFLAGS = -lgcc
 

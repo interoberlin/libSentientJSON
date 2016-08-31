@@ -4,11 +4,14 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include <stdint.h>
 #include <stdbool.h>
 
 #include "pattern.h"
 #include "json.h"
+
+#define DEBUG_PARSER
 
 /*
  * Stub callback functions
@@ -32,7 +35,11 @@ void error_handler(char* message)
 int main()
 {
     printf("Begin JSON parser test...\n");
-    char* json = "  {}";
+
+    // Notation char* json = "{}"; is invalid here!
+    // String literals are not writeable
+    char json[] = "  {}  ";
+
     parser_t parser;
 
     set_parser_callbacks(&parser, &set_led, &set_led_channel, &error_handler);
