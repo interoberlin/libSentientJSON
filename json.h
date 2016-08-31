@@ -10,15 +10,16 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
+#include <stdlib.h>
 
 /**
  * These types declares, how the callback function should look like,
  * that is executed by the parser in order to set the intensity of an LED or LED channel
  */
-typedef void (*set_led_callback_t)(uint8_t led, uint8_t value);
+typedef void (*set_led_callback_t)(uint8_t led, uint32_t value);
 
 // new_value = (old_value & bitmask) | value;
-typedef void (*set_led_channel_callback_t)(uint8_t led, uint8_t value, uint8_t bitmask);
+typedef void (*set_led_channel_callback_t)(uint32_t led, uint32_t value, uint32_t bitmask);
 
 /**
  * Declares a callback, which is invoked in case of parsing errors
@@ -44,6 +45,6 @@ void set_parser_callbacks(parser_t*, set_led_callback_t, set_led_channel_callbac
 /**
  * Parsing happens here
  */
-void parse(parser_t*, char*, uint8_t length);
+void process_json(parser_t*, char*, uint8_t length);
 
 #endif

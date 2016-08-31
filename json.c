@@ -109,16 +109,14 @@ void extract_bracket_contents(parser_t* parser, char** s)
  */
 void trim_spaces(char** s)
 {
+    // disregard leading spaces
     while (**s == ' ')
-    {
-        printf("%s\n", *s);
         (*s)++;
-    }
 
-    uint8_t length = strlen(*s);
-    int cursor = length;
+    // overwrite trailing spaces
+    int cursor = strlen(*s);
     while (cursor-- >= 0 && *((*s)+cursor) == ' ')
-        **s = 0;
+        *((*s)+cursor) = 0;
 }
 
 /**
@@ -166,7 +164,7 @@ int find_semicolon(char* s)
 }
 
 /**
- * Return string until first semicolon,
+ * Return substring  from string until first semicolon,
  * terminates string with null character
  * and increments original string pointer
  * to first character after semicolon
@@ -210,9 +208,51 @@ char* after_semicolon(parser_t* parser, char** s)
 }
 
 /**
- * Main JSON parsing function
+ * Process brackets with LED color assignments
  */
-void parse(parser_t* parser, char* data, uint8_t length)
+void process_json_colors(char* value, uint8_t* red, uint8_t* green, uint8_t* blue)
+{
+    int index_comma = find_comma(value);
+
+    *(value+index_comma) = 0;
+    *red = atoi(value);
+
+    value += index_comma+1;
+
+    index_comma = find_comma(value);
+
+    *(value+index_comma) = 0;
+    *green = atoi(value);
+
+    value += index_comma+1;
+
+    index_comma = find_comma(value);
+
+    *(value+index_comma) = 0;
+    *blue = atoi(value);
+}
+
+/**
+ * Process one LED value assignment
+ */
+void process_led_select(parser_t* parser, char* key, char* value)
+{
+    uint32_t led_number = atoi(key);
+
+    uint8_t red = 0;
+    uint8_t green = 0;
+    uint8_t blue = 0;
+    process_json_colors(value, &red, &green, &blue);
+
+    printf("int0: %d\n", red);
+    printf("int1: %d\n", green);
+    printf("int2: %d\n", blue);
+}
+
+/**
+ * JSON root parsing function
+ */
+void process_json(parser_t* parser, char* data, uint8_t length)
 {
     // disregard strings outside brackets
     printf("Original string is \"%s\"\n", data);
@@ -229,17 +269,25 @@ void parse(parser_t* parser, char* data, uint8_t length)
         printf("Semicolon at string index %d\n", index_semicolon);
         char* key   = until_semicolon(&data, index_semicolon);
         printf("Key: %s\n", key);
+        trim_spaces(&key);
+        printf("Key: %s\n", key);
         char* value = after_semicolon(parser, &data);
         printf("Value: %s\n", value);
+        trim_spaces(&value);
+        printf("Value: %s\n", value);
+
+        process_led_select(parser, key, value);
 
         printf("Remaining string: %s\n", data);
         index_comma     = find_comma(data);
-        data += index_comma+1;
-        index_semicolon = find_semicolon(data);
-        printf("Comma at index %d, semicolon at index %d\n", index_comma, index_semicolon);
-        if (index_comma == -1 || index_semicolon == -1 || index_comma > index_semicolon)
-        {
+        if (index_comma < 0)
             break;
-        }
+
+        // step over the comma
+        data += index_comma+1;
+
+        index_semicolon = find_semicolon(data);
+        if (index_semicolon < 0)
+            break;
     }
 }
