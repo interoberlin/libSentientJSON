@@ -24,7 +24,28 @@ void sentient_json_interpret(char* json, callbacks_t* callbacks)
     {
         if (jsmn_equals(json, &token[i], "leds"))
         {
-            callbacks->debug("leds!\n");
+            callbacks->debug("LEDs entry found in JSON.\n");
+
+            if (i+1 >= count)
+            {
+                callbacks->debug("The number of tokens is too damn low.\n");
+                break;
+            }
+
+            if (token[i+1].type == JSMN_ARRAY)
+            {
+                callbacks->debug("is array\n");
+                for (int j = 0; j < token[i+1].size; j++)
+                {
+                    jsmntok_t *g = &token[i+j+2];
+                    printf(" %.*s\n", g->end - g->start, json + g->start);
+                    i++;
+                }
+            }
+            else
+            {
+                callbacks->error("The value for this key must be of type array.");
+            }
         }
     }
 }

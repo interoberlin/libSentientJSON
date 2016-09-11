@@ -5,6 +5,9 @@
 #include <stdint.h>
 #include <string.h>
 
+// TODO: remove... is only for debug purposes
+#include <stdio.h>
+
 #include "callbacks.h"
 #include "jsmn.h"
 
