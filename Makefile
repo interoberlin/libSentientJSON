@@ -7,7 +7,7 @@ LDFLAGS = -lgcc
 
 all: test
 
-test: test.o callbacks.o jasmine/jsmn.o
+test: test.o callbacks.o sentient_json.o jasmine/jsmn.o
 	$(LD) $(LDFLAGS) $^ -o $@
 
 %.o: %.c

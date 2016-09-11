@@ -9,10 +9,9 @@
 #include <stdbool.h>
 
 #include "callbacks.h"
-#include "led_pattern.h"
-#include "jsmn.h"
+#include "sentient_json.h"
 
-#define DEBUG_JSON_PARSER
+#define DEBUG_INTERPRETER
 
 /*
  * Stub callback functions
@@ -37,13 +36,22 @@ int main()
 {
     printf("Begin JSON parser test...\n");
 
-    // Notation char* json = "{}"; is invalid here!
-    // String literals are not writeable
-    //char json[] = "  { 0: {1,2,3}, 1 : {20,30,40}  }  ";
+    /*
+     * Note:
+     *   char* json = "...";
+     * is not valid here,
+     * because string literals are
+     * by default not writeable in C.
+     */
+    char test_json[] = "{ \"leds\" : [{\"index\": 1, \"values\": [0,0,0]}, {\"index\": \"2\", \"values\": [255,255,255]} ]}";
 
-    callbacks_t callbacks;
+    // define parser callback functions
+    callbacks_t c;
+    callbacks_t* callbacks = &c;
+    set_callbacks(callbacks, &set_led, &set_led_channel, &error_handler);
 
-    set_callbacks(&callbacks, &set_led, &set_led_channel, &error_handler);
+    // parse test JSON
+    sentient_json_interpret(test_json, callbacks);
 
     printf("JSON parser test completed.\n");
     return 0;
