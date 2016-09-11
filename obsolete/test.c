@@ -8,11 +8,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "callbacks.h"
-#include "led_pattern.h"
-#include "jsmn.h"
+#include "pattern.h"
+#include "json.h"
 
-#define DEBUG_JSON_PARSER
+#define DEBUG_PARSER
 
 /*
  * Stub callback functions
@@ -39,11 +38,12 @@ int main()
 
     // Notation char* json = "{}"; is invalid here!
     // String literals are not writeable
-    //char json[] = "  { 0: {1,2,3}, 1 : {20,30,40}  }  ";
+    char json[] = "  { 0: {1,2,3}, 1 : {20,30,40}  }  ";
 
-    callbacks_t callbacks;
+    parser_t parser;
 
-    set_callbacks(&callbacks, &set_led, &set_led_channel, &error_handler);
+    set_parser_callbacks(&parser, &set_led, &set_led_channel, &error_handler);
+    process_json(&parser, json, strlen(json));
 
     printf("JSON parser test completed.\n");
     return 0;

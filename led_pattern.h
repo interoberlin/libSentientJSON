@@ -1,7 +1,6 @@
 /**
- * In dieser Datei sind die Datentypen und Methoden deklariert,
- * die benoetigt werden, um die Farbaenderungsmuster
- * der LEDs festzulegen und zu handhaben
+ * This file declares types and methods,
+ * which control the change of LED colors/values over time
  */
 
 #ifndef PATTERN_H
@@ -11,9 +10,10 @@
 #include <stdint.h>
 
 /**
- * This struct/type holds information for
- * the behaviour of one LED channel
- * (every LED has three channels)
+ * struct and type to hold information on
+ * how an LED channel/value changes over time
+ *
+ * Note: Every LED has three channels
  */
 struct pattern_s
 {

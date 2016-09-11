@@ -1,16 +1,18 @@
 
 CC = colorgcc
 CFLAGS = -std=gnu99 -Wall -Wextra -Wwrite-strings -g
+CFLAGS += -I jasmine/
 LD = gcc
 LDFLAGS = -lgcc
 
-clean:
-	rm *.o
-
 all: test
 
-test: test.o json.o
+test: test.o callbacks.o jasmine/jsmn.o
 	$(LD) $(LDFLAGS) $^ -o $@
 
-%.o: %.c %s
+%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -f *.o
+	rm -f jasmine/jsmn.o
