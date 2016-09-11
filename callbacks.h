@@ -16,10 +16,11 @@ typedef void (*set_led_callback_t)(uint32_t led, uint32_t value);
 // new_value = (old_value & bitmask) | value;
 typedef void (*set_led_channel_callback_t)(uint32_t led, uint32_t value, uint32_t bitmask);
 
-/**
- * Declares a callback, which is invoked in case of parsing errors
- */
-typedef void (*error_callback_t)(char* message);
+// in case of errors
+typedef void (*error_callback_t)(const char* message);
+
+// for debug messages
+typedef void (*debug_callback_t)(const char* message);
 
 /**
  * A container for callbacks
@@ -28,7 +29,8 @@ struct callbacks_s
 {
     set_led_callback_t set_led;
     set_led_channel_callback_t set_led_channel;
-    error_callback_t error_handler;
+    error_callback_t error;
+    debug_callback_t debug;
 };
 typedef struct callbacks_s callbacks_t;
 
@@ -39,7 +41,8 @@ void set_callbacks(
         callbacks_t*,
         set_led_callback_t,
         set_led_channel_callback_t,
-        error_callback_t
+        error_callback_t,
+        debug_callback_t
         );
 
 #endif
